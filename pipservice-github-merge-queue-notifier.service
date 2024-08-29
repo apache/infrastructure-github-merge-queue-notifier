@@ -1,0 +1,13 @@
+[Unit]
+Description=GitHub Merge Queue Notifier
+ 
+[Service]
+Type=simple
+WorkingDirectory=/opt/github-merge-queue-notifier
+ExecStart=/usr/local/bin/pipenv run python3 mergequeue.py
+Restart=always
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target
