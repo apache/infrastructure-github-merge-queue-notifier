@@ -105,4 +105,5 @@ if __name__ == "__main__":
     app = main()
     app.runx(port=8085)
 else:
-    # Hypercorn or som
+    # Hypercorn or some such
+    app = main()
