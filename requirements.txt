@@ -1,3 +1,4 @@
 asfquart
 aiohttp
 PyYAML
+asfpy
