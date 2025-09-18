@@ -77,7 +77,7 @@ class MergeQueueEvent:
 
     async def pubsub(self):
         """Publishes MQ payload to PubSub if valid"""
-        if self.payload:
+        if self.payload and self.payload.get("message"):
             async with aiohttp.ClientSession() as client:
                 try:
                     await client.post(f"{PUBSUB_URL}/{self.repository}", json=self.payload)
