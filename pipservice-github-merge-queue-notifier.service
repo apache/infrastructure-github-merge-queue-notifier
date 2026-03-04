@@ -4,7 +4,7 @@ Description=GitHub Merge Queue Notifier
 [Service]
 Type=simple
 WorkingDirectory=/opt/github-merge-queue-notifier
-ExecStart=/usr/local/bin/pipenv run hypercorn mergequeue:app -b localhost:8085 -w 5
+ExecStart=/usr/local/bin/pipenv run hypercorn mergequeue:app -b localhost:8085 -w 10
 Restart=always
 User=www-data
 Group=www-data
