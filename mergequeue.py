@@ -39,7 +39,8 @@ class MergeQueueEvent:
             return
         now = int(time.time())
         if not GHMAP_CACHE or GHMAP_CACHE[0] < (now - GHMAP_CACHE_TIME):
-            GHMAP_CACHE = [now, yaml.safe_load(open(GH_MAP_FILE, "r"))]
+            GHMAP_CACHE.clear()
+            GHMAP_CACHE.extend([now, yaml.safe_load(open(GH_MAP_FILE, "r"))])
         gh_user_map = GHMAP_CACHE[1]
         self.ed = easydict.EasyDict(payload)
         self.login = payload.get("sender").get("login")  # GitHub User ID
