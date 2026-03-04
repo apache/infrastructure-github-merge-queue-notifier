@@ -27,10 +27,13 @@ import easydict
 GH_MAP_FILE = "/opt/boxer/server/ghmap.yaml"
 PUBSUB_URL = "https://pubsub.apache.org:2070/github/mergequeue"
 DEFAULT_ORG = "apache"
-
+LOGGED_EVENTS = ("pull_request", "merge_group")
 
 class MergeQueueEvent:
     def __init__(self, event_type, payload):
+        if event_type not in LOGGED_EVENTS:  # Bail early if we aren't going to log it
+            return
+        
         gh_user_map = yaml.safe_load(
             open(GH_MAP_FILE, "r")
         )  # Should be reloaded on each event to account for new mappings
