@@ -22,21 +22,24 @@ import quart
 import yaml
 import aiohttp
 import easydict
+import time
 
 # GitHub <-> ASF user mappings
 GH_MAP_FILE = "/opt/boxer/server/ghmap.yaml"
 PUBSUB_URL = "https://pubsub.apache.org:2070/github/mergequeue"
 DEFAULT_ORG = "apache"
 LOGGED_EVENTS = ("pull_request", "merge_group")
+GHMAP_CACHE = []
+GHMAP_CACHE_TIME = 3600
 
 class MergeQueueEvent:
     def __init__(self, event_type, payload):
         if event_type not in LOGGED_EVENTS:  # Bail early if we aren't going to log it
             return
-        
-        gh_user_map = yaml.safe_load(
-            open(GH_MAP_FILE, "r")
-        )  # Should be reloaded on each event to account for new mappings
+        now = int(time.time())
+        if not GHMAP_CACHE or GHMAP_CACHE[0] < (now - GHMAP_CACHE_TIME):
+            GHMAP_CACHE = [now, yaml.safe_load(open(GH_MAP_FILE, "r"))]
+        gh_user_map = GHMAP_CACHE[1]
         self.ed = easydict.EasyDict(payload)
         self.login = payload.get("sender").get("login")  # GitHub User ID
         self.asf_id = gh_user_map.get(self.login, "UNKNOWN-COMMITTER")  # ASF ID if mappings work
