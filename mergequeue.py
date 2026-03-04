@@ -34,6 +34,7 @@ GHMAP_CACHE_TIME = 3600
 
 class MergeQueueEvent:
     def __init__(self, event_type, payload):
+        self.payload = {}
         if event_type not in LOGGED_EVENTS:  # Bail early if we aren't going to log it
             return
         now = int(time.time())
@@ -44,7 +45,6 @@ class MergeQueueEvent:
         self.login = payload.get("sender").get("login")  # GitHub User ID
         self.asf_id = gh_user_map.get(self.login, "UNKNOWN-COMMITTER")  # ASF ID if mappings work
         self.repository = self.ed.repository.name
-        self.payload = {}
         if event_type == "pull_request":
             self.payload = {
                 "organization": self.ed.organization,
