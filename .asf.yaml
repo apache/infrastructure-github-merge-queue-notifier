@@ -1,3 +1,5 @@
+meta:
+    environment: github_rulesets
 github:
   rulesets:
     - name: "Default Branch Protection"
