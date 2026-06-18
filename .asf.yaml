@@ -3,15 +3,24 @@ meta:
 github:
   rulesets:
     - name: "Default Branch Protection"
-      type: branch
-      branches:
-        includes:
-          - "~DEFAULT_BRANCH"
-          - "release/*"
-          - "rel/*"
-        excludes: []
-      bypass_teams:
-        - root
-      restrict_deletion: true
-      restrict_force_push: true
-
+      target: branch
+      enforcement: active
+      conditions:
+        ref_name:
+          include:
+            - "~DEFAULT_BRANCH"
+            - "refs/heads/release/*"
+            - "refs/heads/rel/*"
+          exclude: []
+      bypass_actors:
+        # apache/root - ASF Infra team.
+        - actor_id: 118420
+          actor_type: Team
+          bypass_mode: always
+        # Humbedooh - bypass test
+        - actor_id: 496607
+          actor_type: User
+          bypass_mode: always
+      rules:
+        - type: deletion
+        - type: non_fast_forward
